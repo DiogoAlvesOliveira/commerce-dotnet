@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using NTTData.Data;
+using NTTData.Dtos;
 using NTTData.Models;
 using NTTData.Repositories;
 
@@ -18,8 +19,31 @@ public class ClientService : IClientService
         _clientRepository = clientRepository;
     }
 
-    public async Task<List<Client>> findAll()
+    public async Task<List<ClientDto>> findAll()
     {
-        return await _clientRepository.findAll();
+        var client = await _clientRepository.findAll();
+        List<ClientDto> clientDtos = new List<ClientDto>();
+        foreach (var cli in client){
+            clientDtos.Add(toCleintDto(cli));
+        }
+        return clientDtos;
+        
+    }
+
+    public async Task<ClientDto> findByEmail(string email)
+    {
+        var client = await _clientRepository.findByEmail(email);
+
+        return toCleintDto(client);
+    }
+
+    private ClientDto toCleintDto(Client client)
+    {
+        return new ClientDto(){
+            id = client.id,
+            name = client.name,
+            surname = client.surname,
+            email = client.email
+        };
     }
 }

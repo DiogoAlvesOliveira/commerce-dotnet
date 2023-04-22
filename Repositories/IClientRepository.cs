@@ -9,4 +9,5 @@ namespace NTTData.Repositories;
 public interface IClientRepository
 {
     public Task<List<Client>> findAll();
+    public Task<Client> findByEmail(string email);
 }

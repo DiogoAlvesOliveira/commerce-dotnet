@@ -1,3 +1,4 @@
+using System.Xml.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using NTTData.Data;
 using NTTData.Models;
 using NTTData.Services;
+using NTTData.Dtos;
 
 namespace NTTData.Controllers;
 
@@ -20,11 +22,20 @@ public class ClientController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<Client>>> findAll(){
+    public async Task<ActionResult<List<ClientDto>>> findAll(){
         var clients =await _clientService.findAll();
         if (clients is null){
             return BadRequest();
         }
         return clients;
+    }
+
+    [HttpGet("{email}")]
+    public async Task<ActionResult<ClientDto>> findByEmail(string email){
+        var client = await _clientService.findByEmail(email);
+        if (client is null){
+            return NotFound();
+        }
+        return client;
     }
 }

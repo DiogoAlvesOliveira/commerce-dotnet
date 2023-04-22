@@ -21,4 +21,9 @@ public class ClientRepository : IClientRepository
     {
         return await _client.AsNoTracking().ToListAsync();
     }
+
+    public async Task<Client> findByEmail(string email)
+    {
+        return await _client.AsNoTracking().Where(c => c.email == email).FirstAsync();
+    }
 }
