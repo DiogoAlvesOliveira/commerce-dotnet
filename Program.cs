@@ -1,11 +1,15 @@
 using Microsoft.EntityFrameworkCore;
 using NTTData.Data;
+using NTTData.Repositories;
+using NTTData.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddTransient<IClientService, ClientService>();
+builder.Services.AddTransient<IClientRepository, ClientRepository>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

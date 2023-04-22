@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using NTTData.Data;
 using NTTData.Models;
+using NTTData.Services;
 
 namespace NTTData.Controllers;
 
@@ -12,15 +13,15 @@ namespace NTTData.Controllers;
 [Route("api/[controller]")]
 public class ClientController : ControllerBase
 {
-    private readonly AppDbContext _context;
+    private IClientService _clientService;
 
-    public ClientController (AppDbContext context){
-        _context = context;
+    public ClientController (IClientService clientService){
+        _clientService = clientService;
     }
 
     [HttpGet]
-    public ActionResult<List<Client>> findAll(){
-        var clients = _context.Clients.ToList();
+    public async Task<ActionResult<List<Client>>> findAll(){
+        var clients =await _clientService.findAll();
         if (clients is null){
             return BadRequest();
         }
