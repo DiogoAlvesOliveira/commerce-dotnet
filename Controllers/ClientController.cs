@@ -8,34 +8,62 @@ using NTTData.Data;
 using NTTData.Models;
 using NTTData.Services;
 using NTTData.Dtos;
+using NTTData.Controllers.Api;
 
 namespace NTTData.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class ClientController : ControllerBase
+public class ClientController : ClientApi
 {
     private IClientService _clientService;
 
-    public ClientController (IClientService clientService){
+    public ClientController(IClientService clientService)
+    {
         _clientService = clientService;
     }
 
-    [HttpGet]
-    public async Task<ActionResult<List<ClientDto>>> findAll(){
-        var clients =await _clientService.findAll();
-        if (clients is null){
+    public override async Task<ActionResult<List<ClientDto>>> findAll()
+    {
+        var clients = await _clientService.findAll();
+        if (clients is null)
+        {
             return BadRequest();
         }
         return clients;
     }
 
-    [HttpGet("{email}")]
-    public async Task<ActionResult<ClientDto>> findByEmail(string email){
+    public override async Task<ActionResult<ClientDto>> findByEmail(string email)
+    {
         var client = await _clientService.findByEmail(email);
+        if (client is null)
+        {
+            return NotFound();
+        }
+        return client;
+    }
+
+    public override async Task<ActionResult<ClientDto>> findById(int id)
+    {
+        var client = await _clientService.findById(id);
         if (client is null){
             return NotFound();
         }
         return client;
+    }
+    public override async Task<ActionResult> insertClient(ClientDto clientDto)
+    {
+        Client client = _clientService.toClient(clientDto);
+        client = await _clientService.insert(client);
+        return new CreatedAtRouteResult("GetClient", new { id = client.id }, client);
+    }
+
+    public override Task<ActionResult> updateClient(string email, ClientDto clientDto)
+    {
+        throw new NotImplementedException();
+    }
+    public override Task<ActionResult> deleteClient(string email)
+    {
+        throw new NotImplementedException();
     }
 }

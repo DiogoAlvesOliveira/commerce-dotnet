@@ -37,6 +37,28 @@ public class ClientService : IClientService
         return toCleintDto(client);
     }
 
+    public async Task<ClientDto> findById(int id)
+    {
+        var client = await _clientRepository.findById(id);
+
+        return toCleintDto(client);
+    }
+
+    public async Task<Client> insert(Client client)
+    {
+        return await _clientRepository.insert(client);
+    }
+
+    public Client toClient(ClientDto clientDto)
+    {
+        return new Client(){
+            id = clientDto.id,
+            name = clientDto.name,
+            surname = clientDto.surname,
+            email = clientDto.email
+        };
+    }
+
     private ClientDto toCleintDto(Client client)
     {
         return new ClientDto(){

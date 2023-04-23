@@ -10,4 +10,6 @@ public interface IClientRepository
 {
     public Task<List<Client>> findAll();
     public Task<Client> findByEmail(string email);
+    public Task<Client> findById(int id);
+    public Task<Client> insert(Client client);
 }
